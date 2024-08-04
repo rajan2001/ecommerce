@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/Dashboard/alert-modal";
 import { ApiAlert } from "@/components/Dashboard/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
+import ImageUpload from "./image-upload";
 
 interface BillBoardFormProps {
     initialData: Billboard | null | undefined;
@@ -109,11 +110,7 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
                             <FormItem>
                                 <FormLabel>Background Image</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="BillBoard name"
-                                        {...field}
-                                        disabled={loading}
-                                    />
+                                    <ImageUpload />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -133,7 +130,7 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
                                             disabled={loading}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    {/* <FormMessage /> */}
                                 </FormItem>
                             )}
                         />
