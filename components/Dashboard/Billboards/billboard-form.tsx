@@ -54,7 +54,7 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setLoading(true);
-            await axios.patch(`/api/store/${params.storeId}`, values);
+            await axios.post(`/api/store/${params.storeId}/billboards`, values);
             router.refresh();
             toast.success(`${initialData ? "BillBoard updated Succesfully" : "BillBoard Created"}`);
         } catch (error) {
@@ -108,9 +108,12 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
                         name="imageUrl"
                         render={({ field }) => (
                             <FormItem>
+
                                 <FormLabel>Background Image</FormLabel>
                                 <FormControl>
-                                    <ImageUpload />
+                                    <ImageUpload onChange={(url: any) => field.onChange(url)}
+                                        onRemove={() => field.onChange("")}
+                                        value={field.value ? [field.value] : []} disabled={loading} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -130,7 +133,7 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
                                             disabled={loading}
                                         />
                                     </FormControl>
-                                    {/* <FormMessage /> */}
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
