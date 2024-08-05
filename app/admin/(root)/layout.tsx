@@ -11,7 +11,7 @@ export default async function SetupLayout({
     const { userId } = auth();
 
     if (!userId) {
-        redirect("/sign-in")
+        redirect("/admin/sign-in")
     }
 
 
@@ -22,7 +22,7 @@ export default async function SetupLayout({
     })
 
     if (store) {
-        redirect(`/${store.id}`)
+        redirect(`/admin/${store.id}`)
     }
 
 

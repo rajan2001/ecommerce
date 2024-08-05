@@ -14,7 +14,7 @@ export default async function DashBoardLayout({
     const { userId } = auth();
 
     if (!userId) {
-        redirect("/sign-in")
+        redirect("/admin/sign-in")
     }
 
 
@@ -26,7 +26,7 @@ export default async function DashBoardLayout({
     })
 
     if (!store) {
-        redirect("/")
+        redirect("/admin")
     }
 
 

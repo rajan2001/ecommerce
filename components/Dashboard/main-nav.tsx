@@ -12,34 +12,34 @@ const MainNavBar = ({
 
     const routes = [
         {
-            href: `/${params.storeId}`,
+            href: `/admin/${params.storeId}`,
             label: "DashBoard",
-            active: pathname === `/${params.storeId}`
+            active: pathname === `/admin/${params.storeId}`
         },
         {
-            href: `/${params.storeId}/billboards`,
+            href: `/admin/${params.storeId}/billboards`,
             label: "Billboards",
-            active: pathname === `/${params.storeId}/billboards`
+            active: pathname === `/admin/${params.storeId}/billboards`
         },
         {
-            href: `/${params.storeId}/categories`,
+            href: `/admin/${params.storeId}/categories`,
             label: "Categories",
-            active: pathname === `/${params.storeId}/categories`
+            active: pathname === `/admin/${params.storeId}/categories`
         },
         {
-            href: `/${params.storeId}/color`,
+            href: `/admin/${params.storeId}/color`,
             label: "Color",
-            active: pathname === `/${params.storeId}/color`
+            active: pathname === `/admin/${params.storeId}/color`
         },
         {
-            href: `/${params.storeId}/size`,
+            href: `/admin/${params.storeId}/size`,
             label: "Size",
-            active: pathname === `/${params.storeId}/size`
+            active: pathname === `/admin/${params.storeId}/size`
         },
         {
-            href: `/${params.storeId}/settings`,
+            href: `/admin/${params.storeId}/settings`,
             label: "Settings",
-            active: pathname === `/${params.storeId}/settings`,
+            active: pathname === `/admin/${params.storeId}/settings`,
         }
     ];
     return (

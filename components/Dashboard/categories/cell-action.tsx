@@ -63,7 +63,7 @@ const CellAction = ({ data }: any) => {
                         <CopyIcon className="h-4 w-4 mr-2" />
                         Copy ID
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/${params.storeId}/categories/${data.id}`)}>
+                    <DropdownMenuItem onClick={() => router.push(`/admin/${params.storeId}/categories/${data.id}`)}>
                         <EditIcon className="h-4 w-4 mr-2" />
                         Update</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setOpen(true)}>

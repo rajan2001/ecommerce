@@ -80,7 +80,7 @@ export const CategoriesForm: React.FC<CategoryFormProps> = ({ initialData, billb
             setLoading(true);
             await axios.delete(`/api/store/${params.storeId}/categories/${params.categoriesId}`);
             router.refresh();
-            router.push(`/${params.storeId}/categories`);
+            router.push(`/admin/${params.storeId}/categories`);
             toast.success("Category deleted");
         } catch (error) {
             toast.error(

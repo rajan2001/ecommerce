@@ -79,7 +79,7 @@ export const ColorForm: React.FC<CategoryFormProps> = ({ initialData }) => {
             setLoading(true);
             await axios.delete(`/api/store/${params.storeId}/color/${params.colorId}`);
             router.refresh();
-            router.push(`/${params.storeId}/color`);
+            router.push(`/admin/${params.storeId}/color`);
             toast.success("Category deleted");
         } catch (error) {
             toast.error(
