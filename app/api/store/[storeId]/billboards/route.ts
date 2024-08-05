@@ -21,6 +21,16 @@ export async function POST(
       return NextResponse.json({ error: "Empty Field" }, { status: 400 });
     }
 
+    const store = await prisma.store.findMany({
+      where: {
+        id: params.storeId,
+      },
+    });
+
+    if (!store) {
+      return NextResponse.json({ error: "Store not found" }, { status: 400 });
+    }
+
     const billboard = await prisma?.billboard.create({
       data: {
         label: label,
@@ -32,6 +42,43 @@ export async function POST(
     return NextResponse.json({ data: billboard }, { status: 201 });
   } catch (error) {
     console.log("BillBoard_post", error);
+    return NextResponse.json({ error }, { status: 500 });
+  }
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "unauthenticated User" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const store = await prisma.store.findMany({
+      where: {
+        id: params.storeId,
+      },
+    });
+
+    if (!store) {
+      return NextResponse.json({ error: "Store not found" }, { status: 400 });
+    }
+
+    const billboard = await prisma?.billboard.findMany({
+      where: {
+        storeId: params.storeId,
+      },
+    });
+
+    return NextResponse.json({ data: billboard }, { status: 200 });
+  } catch (error) {
+    console.log("BillBoard_GET", error);
     return NextResponse.json({ error }, { status: 500 });
   }
 }

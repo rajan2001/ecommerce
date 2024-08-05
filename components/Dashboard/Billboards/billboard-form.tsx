@@ -54,7 +54,12 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setLoading(true);
-            await axios.post(`/api/store/${params.storeId}/billboards`, values);
+            if (initialData) {
+                await axios.patch(`/api/store/${params.storeId}/billboards/${params.billboardId}`, values);
+            }
+            else {
+                await axios.post(`/api/store/${params.storeId}/billboards`, values);
+            }
             router.refresh();
             toast.success(`${initialData ? "BillBoard updated Succesfully" : "BillBoard Created"}`);
         } catch (error) {
@@ -67,9 +72,9 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
     async function onDelete() {
         try {
             setLoading(true);
-            await axios.delete(`/api/store/${params.storeId}`);
+            await axios.delete(`/api/store/${params.storeId}/billboards/${params.billboardId}`);
             router.refresh();
-            router.push("/");
+            router.push(`/api/store/${params.storeId}/billboards`);
             toast.success("Store deleted");
         } catch (error) {
             toast.error(
