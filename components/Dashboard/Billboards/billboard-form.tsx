@@ -74,7 +74,7 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
             setLoading(true);
             await axios.delete(`/api/store/${params.storeId}/billboards/${params.billboardId}`);
             router.refresh();
-            router.push(`/api/store/${params.storeId}/billboards`);
+            router.push(`/${params.storeId}/billboards`);
             toast.success("Store deleted");
         } catch (error) {
             toast.error(

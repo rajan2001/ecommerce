@@ -6,6 +6,7 @@ import { Copy, Server } from "lucide-react";
 import { Badge, BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
+import onCopy from "../Copy";
 
 interface ApiAlertProps {
     title: string;
@@ -28,10 +29,7 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
     description,
     varient,
 }) => {
-    const onCopy = (description: string) => {
-        navigator.clipboard.writeText(description);
-        toast.success("API Route copied to clipboard");
-    };
+
     return (
         <Alert>
             <Server className="h-4 w-4" />
@@ -46,7 +44,7 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
                 <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => onCopy(description)}>
+                    onClick={() => onCopy(description, "API Route copied to clipboard")}>
                     <Copy className="h-4 w-4" />
                 </Button>
             </AlertDescription>
