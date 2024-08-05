@@ -1,27 +1,31 @@
 import { format } from 'date-fns'
-import { BillBoardsClient } from "@/components/Dashboard/Billboards/client";
 import prisma from "@/lib/prismaDb";
-import { BillboradColumn } from "@/components/Dashboard/Billboards/column";
+import { CategoriesColumn } from "@/components/Dashboard/categories/column";
+import { CategoriesClient } from '@/components/Dashboard/categories/client';
 
 const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
-    const billboard = await prisma?.billboard.findMany({
+    const billboard = await prisma?.category.findMany({
         where: {
             storeId: params.storeId,
+        },
+        include: {
+            billboard: true
         },
         orderBy: {
             createdAt: "desc",
         },
     });
 
-    const formattedBillboards: BillboradColumn[] = billboard.map((item) => ({
+    const formattedCategories: CategoriesColumn[] = billboard.map((item) => ({
         id: item.id,
-        label: item.label,
+        name: item.name,
+        billboard: item.billboard.label,
         createdAt: format(item.createdAt, "MMMM do,yyyy"),
     }));
     return (
         <div className=" flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <BillBoardsClient data={formattedBillboards} />
+                <CategoriesClient data={formattedCategories} />
             </div>
         </div>
     );
