@@ -50,15 +50,6 @@ export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { userId } = auth();
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: "unauthenticated User" },
-      { status: 400 }
-    );
-  }
-
   try {
     const store = await prisma.store.findMany({
       where: {

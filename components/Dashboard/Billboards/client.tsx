@@ -8,6 +8,8 @@ import React from "react";
 import { BillboradColumn, columns } from "@/components/Dashboard/Billboards/column";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
+import { ApiAlert } from "../api-alert";
+import { ApiRoutes } from "./api-routes";
 
 interface BillboardClientProps {
     data: BillboradColumn[]
@@ -27,6 +29,7 @@ export const BillBoardsClient: React.FC<BillboardClientProps> = ({ data }) => {
             </div>
             <Separator />
             <DataTable searchKey="label" columns={columns} data={data} />
+            <ApiRoutes storeId={params.storeId} />
         </>
     );
 };

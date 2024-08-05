@@ -22,6 +22,21 @@ const MainNavBar = ({
             active: pathname === `/${params.storeId}/billboards`
         },
         {
+            href: `/${params.storeId}/categories`,
+            label: "Categories",
+            active: pathname === `/${params.storeId}/categories`
+        },
+        {
+            href: `/${params.storeId}/color`,
+            label: "Color",
+            active: pathname === `/${params.storeId}/color`
+        },
+        {
+            href: `/${params.storeId}/size`,
+            label: "Size",
+            active: pathname === `/${params.storeId}/size`
+        },
+        {
             href: `/${params.storeId}/settings`,
             label: "Settings",
             active: pathname === `/${params.storeId}/settings`,
