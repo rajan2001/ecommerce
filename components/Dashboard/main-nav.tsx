@@ -37,6 +37,16 @@ const MainNavBar = ({
             active: pathname === `/admin/${params.storeId}/size`
         },
         {
+            href: `/admin/${params.storeId}/product`,
+            label: "Product",
+            active: pathname === `/admin/${params.storeId}/product`
+        },
+        {
+            href: `/admin/${params.storeId}/order`,
+            label: "Order",
+            active: pathname === `/admin/${params.storeId}/order`
+        },
+        {
             href: `/admin/${params.storeId}/settings`,
             label: "Settings",
             active: pathname === `/admin/${params.storeId}/settings`,
