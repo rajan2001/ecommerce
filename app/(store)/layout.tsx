@@ -19,7 +19,7 @@ export default function RootLayout({
 
         <html lang="en">
             <body className={cn(
-                "min-h-screen bg-background font-sans antialiased max-w-[90rem] px-[4rem] mx-auto",
+                "min-h-screen bg-background font-sans antialiased px-[4rem]",
                 fontSans.variable
             )}>
                 <NavBar />
