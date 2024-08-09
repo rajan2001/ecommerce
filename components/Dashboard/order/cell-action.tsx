@@ -27,9 +27,9 @@ const CellAction = ({ data }: any) => {
     async function onDelete() {
         try {
             setLoading(true);
-            await axios.delete(`/api/store/${params.storeId}/product/${data.id}`);
+            await axios.delete(`/api/store/${params.storeId}/color/${data.id}`);
             router.refresh();
-            toast.success("Product deleted");
+            toast.success("Color deleted");
         } catch (error) {
             toast.error(
                 "Make sure you removed all the products and categories first."
@@ -63,7 +63,7 @@ const CellAction = ({ data }: any) => {
                         <CopyIcon className="h-4 w-4 mr-2" />
                         Copy ID
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/admin/${params.storeId}/product/${data.id}`)}>
+                    <DropdownMenuItem onClick={() => router.push(`/admin/${params.storeId}/color/${data.id}`)}>
                         <EditIcon className="h-4 w-4 mr-2" />
                         Update</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setOpen(true)}>

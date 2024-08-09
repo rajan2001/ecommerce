@@ -37,7 +37,6 @@ model Billboard {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   category  Category[]
-  product   Product[]
 }
 
 model Category {
@@ -75,25 +74,23 @@ model Size {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  name        String
-  billboardId String
-  imageUrl    Image[]
-  price       Decimal
-  billboard   Billboard   @relation(fields: [billboardId], references: [id])
-  sizeId      String
-  size        Size        @relation(fields: [sizeId], references: [id])
-  colorId     String
-  color       Color       @relation(fields: [colorId], references: [id])
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
-  storeId     String
-  store       Store       @relation(fields: [storeId], references: [id])
-  isArchived  Boolean     @default(false)
-  isFeatured  Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  orderItem   OrderItem[]
+  id         String      @id @default(uuid())
+  name       String
+  images     Image[]
+  price      Decimal
+  sizeId     String
+  size       Size        @relation(fields: [sizeId], references: [id])
+  colorId    String
+  color      Color       @relation(fields: [colorId], references: [id])
+  categoryId String
+  category   Category    @relation(fields: [categoryId], references: [id])
+  storeId    String
+  store      Store       @relation(fields: [storeId], references: [id])
+  isArchived Boolean     @default(false)
+  isFeatured Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItem  OrderItem[]
 }
 
 model Image {

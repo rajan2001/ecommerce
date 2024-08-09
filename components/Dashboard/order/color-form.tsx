@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import * as z from "zod";
-import { Billboard } from "@prisma/client";
+import { Billboard, Category, Color } from "@prisma/client";
 import Header from "@/components/Dashboard/heading";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -18,36 +18,41 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input";
 
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/Dashboard/alert-modal";
-import { ApiAlert } from "@/components/Dashboard/api-alert";
-import { useOrigin } from "@/hooks/use-origin";
-import ImageUpload from "./image-upload";
 
-interface BillBoardFormProps {
-    initialData: Billboard | null | undefined;
+interface CategoryFormProps {
+    initialData: Color | null | undefined;
 }
 
 const formSchema = z.object({
-    label: z.string().min(2).max(50),
-    imageUrl: z.string()
+    name: z.string().min(2).max(50),
+    value: z.string().min(3).startsWith("#").max(7)
 });
-export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => {
+export const ColorForm: React.FC<CategoryFormProps> = ({ initialData }) => {
     const params = useParams();
     const router = useRouter();
-    const origin = useOrigin();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
-            label: '',
-            imageUrl: ''
+            name: '',
+            value: ''
         },
     });
 
@@ -55,13 +60,13 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
         try {
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/store/${params.storeId}/billboards/${params.billboardId}`, values);
+                await axios.patch(`/api/store/${params.storeId}/color/${params.colorId}`, values);
             }
             else {
-                await axios.post(`/api/store/${params.storeId}/billboards`, values);
+                await axios.post(`/api/store/${params.storeId}/color`, values);
             }
             router.refresh();
-            toast.success(`${initialData ? "BillBoard updated Succesfully" : "BillBoard Created"}`);
+            toast.success(`${initialData ? "Color updated Succesfully" : "Color Created"}`);
         } catch (error) {
             toast.error("Something went wrong");
         } finally {
@@ -72,10 +77,10 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
     async function onDelete() {
         try {
             setLoading(true);
-            await axios.delete(`/api/store/${params.storeId}/billboards/${params.billboardId}`);
+            await axios.delete(`/api/store/${params.storeId}/color/${params.colorId}`);
             router.refresh();
-            router.push(`/admin/${params.storeId}/billboards`);
-            toast.success("Store deleted");
+            router.push(`/admin/${params.storeId}/color`);
+            toast.success("Category deleted");
         } catch (error) {
             toast.error(
                 "Make sure you removed all the products and categories first."
@@ -94,7 +99,7 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
                 onConfirm={onDelete}
             />
             <div className="flex items-center justify-between">
-                <Header title={`${initialData ? "Edit BillBoard" : "Create BillBoard"}`} description={`${initialData ? "Edit a BillBoard" : "Add a new BillBoard"}`} />
+                <Header title={`${initialData ? "Edit Color" : "Create Color"}`} description={`${initialData ? "Edit a Color" : "Add a new Color"}`} />
                 {initialData && <Button
                     variant="destructive"
                     onClick={() => {
@@ -107,34 +112,17 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
             </div>
             <Separator />
             <Form {...form}>
-                <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                        <FormItem>
-
-                            <FormLabel>Background Image</FormLabel>
-                            <FormControl>
-                                <ImageUpload onChange={(url: any) => field.onChange(url)}
-                                    onRemove={() => field.onChange("")}
-                                    value={field.value ? [field.value] : []} disabled={loading} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
-                    <div className="grid grid-cols-3 gap-8">
+                    <div className="grid grid-cols-3 gap-8 ">
                         <FormField
                             control={form.control}
-                            name="label"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Label</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="BillBoard name"
+                                            placeholder="Color name"
                                             {...field}
                                             disabled={loading}
                                         />
@@ -143,9 +131,33 @@ export const BillBoardForm: React.FC<BillBoardFormProps> = ({ initialData }) => 
                                 </FormItem>
                             )}
                         />
+
+                        <FormField
+                            control={form.control}
+                            name="value"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Value</FormLabel>
+                                    <div className="flex gap-4 items-center">
+
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Color Value"
+                                                {...field}
+                                                disabled={loading}
+                                            />
+                                        </FormControl>
+                                        <div style={{ backgroundColor: field.value }} className={`rounded-full p-4`}></div>
+
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                     </div>
                     <Button disabled={loading} type="submit">
-                        {initialData ? "Save changes" : "Create BillBoard"}
+                        {initialData ? "Save changes" : "Create Color"}
                     </Button>
                 </form>
             </Form>

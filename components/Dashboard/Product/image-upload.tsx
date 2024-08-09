@@ -23,7 +23,7 @@ const ImageUpload = ({ onChange, onRemove, value, disabled }: any) => {
 
         <div className='flex items-center bg-slate-300 py-2 px-4 text-sm self-start rounded-lg'>
             <ImageIcon className=' h-4 w-4 mr-2' />
-            <CldUploadWidget uploadPreset="ecommerce" onSuccess={(results: any) => {
+            <CldUploadWidget uploadPreset="ecommerce" onUpload={(results: any) => {
                 if (results) {
                     onChange(results.info.secure_url);
                 }

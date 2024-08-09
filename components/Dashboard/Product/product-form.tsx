@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import * as z from "zod";
-import { Billboard, Category, Image, Product } from "@prisma/client";
+import { Billboard, Category, Color, Image, Product, Size } from "@prisma/client";
 import Header from "@/components/Dashboard/heading";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -26,12 +27,15 @@ import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/Dashboard/alert-modal";
 import ImageUpload from "./image-upload";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface BillBoardFormProps {
     initialData: Product & {
-        imageUrl: Image[]
+        images: Image[]
     } | null | undefined;
-    category: Category[] | null | undefined
+    category: Category[] | null | undefined;
+    size: Size[] | null | undefined;
+    color: Color[] | null | undefined;
 }
 
 const formSchema = z.object({
@@ -44,7 +48,7 @@ const formSchema = z.object({
     isFeatured: z.boolean().optional(),
     isArchived: z.boolean().optional()
 });
-export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, category }) => {
+export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, category, size, color }) => {
     const params = useParams();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -70,13 +74,13 @@ export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, categor
         try {
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/store/${params.storeId}/billboards/${params.billboardId}`, values);
+                await axios.patch(`/api/store/${params.storeId}/product/${params.productId}`, values);
             }
             else {
-                await axios.post(`/api/store/${params.storeId}/billboards`, values);
+                await axios.post(`/api/store/${params.storeId}/product`, values);
             }
             router.refresh();
-            toast.success(`${initialData ? "BillBoard updated Succesfully" : "BillBoard Created"}`);
+            toast.success(`${initialData ? "Product updated Succesfully" : "Product Created"}`);
         } catch (error) {
             toast.error("Something went wrong");
         } finally {
@@ -87,10 +91,10 @@ export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, categor
     async function onDelete() {
         try {
             setLoading(true);
-            await axios.delete(`/api/store/${params.storeId}/billboards/${params.billboardId}`);
+            await axios.delete(`/api/store/${params.storeId}/product/${params.productId}`);
             router.refresh();
-            router.push(`/admin/${params.storeId}/billboards`);
-            toast.success("Store deleted");
+            router.push(`/admin/${params.storeId}/product`);
+            toast.success("Product deleted");
         } catch (error) {
             toast.error(
                 "Make sure you removed all the products and categories first."
@@ -129,22 +133,18 @@ export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, categor
                         <FormItem>
                             <FormLabel>Images</FormLabel>
                             <FormControl>
-                                <ImageUpload onChange={(data: any) => {
-                                    console.log(data)
-                                    field.onChange([...field.value, { url: data }])
-                                }}
-                                    onRemove={(url: any) => {
-                                        console.log(url)
-                                        field.onChange([...field.value.filter((data) => data.url !== url)])
-                                    }}
-                                    value={field.value.map((value) => value.url)}
+                                <ImageUpload onChange={(url: any) => field.onChange([...field.value, { url }])}
+                                    onRemove={(url: any) => field.onChange([...field.value.filter((current) => current.url !== url)])}
+                                    value={field.value.map((image) => image.url)}
                                     disabled={loading} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
 
                     <div className="grid grid-cols-3 gap-8">
                         <FormField
@@ -166,14 +166,31 @@ export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, categor
                         />
                         <FormField
                             control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Price</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="9.99"
+                                            {...field}
+                                            disabled={loading}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
                             name="categoryId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Billboard</FormLabel>
+                                    <FormLabel>Category</FormLabel>
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
-                                            <SelectTrigger className="w-[180px]">
-                                                <SelectValue placeholder="Select a billboard" />
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a Category" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
@@ -186,9 +203,93 @@ export const ProductForm: React.FC<BillBoardFormProps> = ({ initialData, categor
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="sizeId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Size</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a Size" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {size && size.map((data: any) =>
+                                                <SelectItem key={data.id} value={data.id}>{data.name}</SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="colorId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Color</FormLabel>
+                                    <div className="flex gap-4 items-center">
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a color" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {color && color.map((data: any) =>
+                                                    <SelectItem key={data.id} value={data.id}>{data.name}</SelectItem>
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                        <div style={{ backgroundColor: field.value }} className={`rounded-full p-4`}></div>
+                                    </div>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="isFeatured"
+                            render={({ field }) => (
+                                <FormItem className=" flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+
+                                    <FormControl>
+                                        <Checkbox checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>Featured</FormLabel>
+                                        <FormDescription>This product will apper on the home page</FormDescription>
+                                    </div>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="isArchived"
+                            render={({ field }) => (
+                                <FormItem className=" flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+
+                                    <FormControl>
+                                        <Checkbox checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                        <FormLabel>Archived</FormLabel>
+                                        <FormDescription>This product will hidden on the home page</FormDescription>
+                                    </div>
+                                </FormItem>
+                            )}
+                        />
                     </div>
                     <Button disabled={loading} type="submit">
-                        {initialData ? "Save changes" : "Create BillBoard"}
+                        {initialData ? "Save changes" : "Create Product"}
                     </Button>
                 </form>
             </Form>
