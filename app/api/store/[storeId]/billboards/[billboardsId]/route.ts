@@ -96,3 +96,32 @@ export async function DELETE(
     return NextResponse.json({ error }, { status: 500 });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string; billboardsId: string } }
+) {
+  try {
+    const store = await prisma.store.findMany({
+      where: {
+        id: params.storeId,
+      },
+    });
+
+    if (!store) {
+      return NextResponse.json({ error: "Store not found" }, { status: 400 });
+    }
+
+    const billboard = await prisma?.billboard.findFirst({
+      where: {
+        storeId: params.storeId,
+        id: params.billboardsId,
+      },
+    });
+
+    return NextResponse.json({ data: billboard }, { status: 200 });
+  } catch (error) {
+    console.log("BillBoard_GET", error);
+    return NextResponse.json({ error }, { status: 500 });
+  }
+}
