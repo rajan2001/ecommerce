@@ -10,7 +10,7 @@ export const NavBar = async () => {
         <Link href={"/"}>
             <h1 className=" font-bold text-xl">Store</h1>
         </Link>
-        <MainNavBarStore data={data} />
+        <MainNavBarStore data={[]} />
         <Button className="py-2 px-4 rounded-full">
             <ShoppingBagIcon className="h-4 w-4 mr-2" />
             <div>0</div>

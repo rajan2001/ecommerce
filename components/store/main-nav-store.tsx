@@ -13,7 +13,7 @@ const MainNavBarStore = ({
 }: MainNavBarStoreProps) => {
     const pathname = usePathname();
 
-    const routes = data.map((data) =>
+    const routes = data?.map((data) =>
     ({
         href: `/category/${data.id}`,
         label: data.name,
