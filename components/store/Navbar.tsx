@@ -1,19 +1,19 @@
-import { ShoppingBagIcon } from "lucide-react"
-import { Button } from "../ui/button"
+
 import Link from "next/link"
-import MainNavBarStore from "./main-nav-store"
 import { getCatergory } from "@/actions/get-category-actions"
+import MainNavBarStore from "./main-nav-store"
+import { ShoppingBasket } from "lucide-react"
+import ShoppingBag from "./ShoppingBag"
 
 export const NavBar = async () => {
     const data = await getCatergory()
-    return <div className="flex items-center justify-between px-4 md:px-6 lg:px-8 h-16">
-        <Link href={"/"}>
-            <h1 className=" font-bold text-xl">Store</h1>
-        </Link>
-        <MainNavBarStore data={[]} />
-        <Button className="py-2 px-4 rounded-full">
-            <ShoppingBagIcon className="h-4 w-4 mr-2" />
-            <div>0</div>
-        </Button>
+    return <div className="fixed top-0 left-0 w-screen bg-white px-12 z-50">
+        <div className="lg:flex hidden items-center h-16 justify-between">
+            <Link className="text-xl font-bold cursor-pointer flex items-center gap-x-2" href={"/"}>
+                <ShoppingBasket className="h-8 w-8" /> Alamode
+            </Link>
+            <MainNavBarStore data={data} />
+            <ShoppingBag />
+        </div>
     </div>
 }
