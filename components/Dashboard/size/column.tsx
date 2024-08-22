@@ -21,7 +21,7 @@ export const columns: ColumnDef<SizeColumn>[] = [
         accessorKey: "value",
         header: "Value",
     },
-    ,
+
     {
         accessorKey: "createdAt",
         header: "Date",

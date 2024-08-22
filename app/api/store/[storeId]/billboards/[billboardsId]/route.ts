@@ -13,11 +13,11 @@ export async function PATCH(
     const { imageUrl, label } = body;
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
+      return NextResponse.json({ error: "Unauthorized"},{ status: 401 });
     }
 
     if (!imageUrl || !label) {
-      return NextResponse.json({ error: "Empty field", status: 400 });
+      return NextResponse.json({ error: "Empty field"}, {status: 500 });
     }
 
     if (!params.storeId || !params.billboardsId) {
@@ -63,7 +63,7 @@ export async function DELETE(
     const { userId } = auth();
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized", status: 401 });
+      return NextResponse.json({ error: "Unauthorized"},{ status: 401 });
     }
 
     if (!params.storeId || !params.billboardsId) {

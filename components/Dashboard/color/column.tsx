@@ -27,7 +27,7 @@ export const columns: ColumnDef<ColorColumn>[] = [
             </div>
         }
     },
-    ,
+
     {
         accessorKey: "createdAt",
         header: "Date",
